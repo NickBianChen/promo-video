@@ -52,7 +52,7 @@ Location: `<site-repo>/marketing-video/` (next to the source, so features can be
    Fill SCRIPT.md §1–§5. Note pages that 404 live.
 3. **Capture** — edit `capture.json` (baseUrl, `hide` selectors for dev badges/toasts, shots,
    `actions` for clicks/uploads, `crops` for clean UI pieces), then
-   `node <skill>/scripts/capture.mjs <project>` (first time: `cd <skill>/scripts && npm install && npx playwright install chromium`).
+   `node <skill>/scripts/capture.mjs <project>` (needs `<skill>/scripts/install.sh` run once per machine).
    Copy real images, fonts, logo from the site's `public/`. **Look at every image you'll use**:
    dev badges, "Loading…" placeholders, mock-mode text, unreleased nav entries, overlapping layout → recapture or crop.
 4. **Docs** — SCRIPT.md (copy per shot), DESIGN.md + `assets/css/brand.css`, STORYBOARD.md

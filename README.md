@@ -12,7 +12,7 @@
 
 ```bash
 git clone git@github.com:NickBianChen/promo-video.git
-cd promo-video && scripts/install.sh   # 软链到 ~/.claude/skills 和 ~/.agents/skills，安装 Playwright
+cd promo-video && scripts/install.sh   # 软链到 ~/.claude/skills 和 ~/.agents/skills，安装 Playwright + Chromium
 ```
 
 需要：Node 18+、ffmpeg/ffprobe、HyperFrames skills（`npx hyperframes skills update`）。

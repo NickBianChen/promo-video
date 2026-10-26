@@ -9,4 +9,4 @@ for dir in "$HOME/.claude/skills" "$HOME/.agents/skills"; do
   ln -sfn "$KIT_ROOT" "$dir/promo-video"
   echo "linked $dir/promo-video -> $KIT_ROOT"
 done
-(cd "$KIT_ROOT/scripts" && npm install --no-audit --no-fund >/dev/null && echo "playwright installed (run 'npx playwright install chromium' in scripts/ if no browser is cached)")
+(cd "$KIT_ROOT/scripts" && npm install --no-audit --no-fund >/dev/null && npx playwright install chromium && echo "playwright + chromium ready")

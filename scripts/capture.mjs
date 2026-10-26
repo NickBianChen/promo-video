@@ -28,7 +28,9 @@ function loadPlaywright() {
       } catch {}
     }
   }
-  console.error("Playwright not found. Run `npm install` in promo-video/scripts, then `npx playwright install chromium`.");
+  console.error(
+    "Playwright not found. Run `npm install` in promo-video/scripts, then `npx playwright install chromium`.",
+  );
   process.exit(1);
 }
 
@@ -37,6 +39,7 @@ const { chromium } = loadPlaywright();
 const browser = await chromium.launch();
 const hideCss = (config.hide ?? []).map((sel) => `${sel}{display:none!important}`).join("\n");
 let count = 0;
+const failures = [];
 
 try {
   for (const [vpName, vp] of Object.entries(config.viewports)) {
@@ -58,34 +61,41 @@ try {
       if (only && !only.includes(shot.name)) continue;
       if (shot.viewports && !shot.viewports.includes(vpName)) continue;
       const url = new URL(shot.path ?? "/", config.baseUrl).toString();
-      await page.goto(url, { waitUntil: "networkidle", timeout: config.timeout ?? 60000 });
-      if (hideCss) await page.addStyleTag({ content: hideCss });
-      if (shot.waitFor) await page.waitForSelector(shot.waitFor, { timeout: 30000 });
-      for (const step of shot.actions ?? []) {
-        if (step.click) await page.click(step.click);
-        if (step.fill) await page.fill(step.fill[0], step.fill[1]);
-        if (step.upload) await page.setInputFiles(step.upload[0], path.resolve(projectDir, step.upload[1]));
-        if (step.scrollTo) await page.locator(step.scrollTo).scrollIntoViewIfNeeded();
-        if (step.wait) await page.waitForTimeout(step.wait);
-      }
-      await page.waitForTimeout(shot.delay ?? config.delay ?? 800);
+      try {
+        await page.goto(url, { waitUntil: "networkidle", timeout: config.timeout ?? 60000 });
+        if (hideCss) await page.addStyleTag({ content: hideCss });
+        if (shot.waitFor) await page.waitForSelector(shot.waitFor, { timeout: 30000 });
+        for (const step of shot.actions ?? []) {
+          if (step.click) await page.click(step.click);
+          if (step.fill) await page.fill(step.fill[0], step.fill[1]);
+          if (step.upload) await page.setInputFiles(step.upload[0], path.resolve(projectDir, step.upload[1]));
+          if (step.scrollTo) await page.locator(step.scrollTo).scrollIntoViewIfNeeded();
+          if (step.wait) await page.waitForTimeout(step.wait);
+        }
+        await page.waitForTimeout(shot.delay ?? config.delay ?? 800);
 
-      const file = path.join(outDir, `${shot.name}.png`);
-      if (shot.selector) {
-        await page.locator(shot.selector).first().screenshot({ path: file, animations: "disabled" });
-      } else {
-        await page.screenshot({ path: file, fullPage: shot.fullPage ?? false, animations: "disabled" });
-      }
-      count++;
-      console.log(`${vpName}/${shot.name}.png  <- ${url}`);
-
-      // crops: clean pieces of the UI (clip in CSS px of the viewport/page)
-      for (const crop of shot.crops?.[vpName] ?? []) {
-        await mkdir(cropDir, { recursive: true });
-        const cropFile = path.join(cropDir, `${crop.name}.png`);
-        await page.screenshot({ path: cropFile, clip: crop.clip, fullPage: true, animations: "disabled" });
+        const file = path.join(outDir, `${shot.name}.png`);
+        if (shot.selector) {
+          const target = page.locator(shot.selector).first();
+          if ((await target.count()) === 0) throw new Error(`selector "${shot.selector}" matches nothing on ${url}`);
+          await target.screenshot({ path: file, animations: "disabled" });
+        } else {
+          await page.screenshot({ path: file, fullPage: shot.fullPage ?? false, animations: "disabled" });
+        }
         count++;
-        console.log(`  crop ui-crops/${crop.name}.png`);
+        console.log(`${vpName}/${shot.name}.png  <- ${url}`);
+
+        // crops: clean pieces of the UI (clip in CSS px of the viewport/page)
+        for (const crop of shot.crops?.[vpName] ?? []) {
+          await mkdir(cropDir, { recursive: true });
+          const cropFile = path.join(cropDir, `${crop.name}.png`);
+          await page.screenshot({ path: cropFile, clip: crop.clip, fullPage: true, animations: "disabled" });
+          count++;
+          console.log(`  crop ui-crops/${crop.name}.png`);
+        }
+      } catch (err) {
+        failures.push(`${vpName}/${shot.name}`);
+        console.error(`FAILED ${vpName}/${shot.name}: ${err.message.split("\n")[0]}`);
       }
     }
     await context.close();
@@ -93,4 +103,10 @@ try {
 } finally {
   await browser.close();
 }
-console.log(`${count} images. Inspect every one you plan to use: dev badges, loading placeholders, unreleased entries, overlapping layout.`);
+if (failures.length) {
+  console.error(`${failures.length} shot(s) failed: ${failures.join(", ")}`);
+  process.exitCode = 1;
+}
+console.log(
+  `${count} images. Inspect every one you plan to use: dev badges, loading placeholders, unreleased entries, overlapping layout.`,
+);
