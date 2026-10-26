@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="../assets/vendor/gsap.min.js"></script>
+    <link rel="stylesheet" href="../assets/css/theme.css" />
+    <link rel="stylesheet" href="../assets/css/brand.css" />
+    <link rel="stylesheet" href="../assets/css/base.css" />
+    <script src="../assets/js/motion.js"></script>
+    <style>
+      html,
+      body {
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: var(--canvas);
+        font-family: var(--font-display);
+        color: var(--ink);
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <!--
+      Portrait root (demo, 10s). Render with: render -c compositions/portrait.html
+      (a project allows one root index.html). Keep text out of the top and
+      bottom 15% (288px); captions and CTA live in the middle band.
+    -->
+    <div id="root" data-composition-id="portrait" data-start="0" data-duration="10" data-width="1080" data-height="1920">
+      <div id="bg-portrait" data-composition-id="bg-portrait" data-composition-src="compositions/bg-portrait.html"
+        data-start="0" data-duration="10" data-track-index="0" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="cap-p1" data-composition-id="caption-rise" data-composition-src="compositions/caption-rise.html"
+        data-start="0.15" data-duration="3.05" data-track-index="20" data-track-kind="captions" data-width="864" data-height="300"
+        style="left:108px;top:420px;width:864px;height:300px;z-index:30;"
+        data-variable-values='{"text":"Your hook goes here.","accent":"ink","size":11,"exit":"fade","duration":3.05}'></div>
+      <div id="cmp-p1" data-composition-id="compare" data-composition-src="compositions/compare.html"
+        data-start="3.0" data-duration="3.4" data-track-index="11" data-track-kind="graphics" data-width="760" data-height="950"
+        style="left:160px;top:480px;width:760px;height:950px;z-index:20;border-radius:var(--card-radius);overflow:hidden;box-shadow:var(--card-shadow);"
+        data-variable-values='{"before_src":"assets/placeholder/before.svg","after_src":"assets/placeholder/after.svg","label_a":"Before","label_b":"After","wipe_at":0.4,"exit":"fade","duration":3.4}'></div>
+      <div id="cta-p" data-composition-id="cta" data-composition-src="compositions/cta.html"
+        data-start="6.2" data-duration="3.8" data-track-index="30" data-track-kind="graphics" data-width="1080" data-height="1344"
+        style="left:0;top:288px;width:1080px;height:1344px;z-index:30;"
+        data-variable-values='{"brand_name":"Brand","headline":"Try it free.","chip":"Free credits","cta":"Get started","url":"example.com","fine":"Results may vary.","duration":3.8}'></div>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      window.__timelines["portrait"] = tl;
+    </script>
+  </body>
+</html>

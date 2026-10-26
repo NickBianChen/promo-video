@@ -1,0 +1,8 @@
+/* brand.css: the website's own colors. Take them from the site's CSS/theme
+   source (globals.css, tailwind config), not from guesses or old docs. */
+:root {
+  --brand: #7d2ae8;        /* primary: emphasis words, buttons, CTA */
+  --brand-strong: #5b1fb0; /* darker accent, links */
+  --brand-soft: #f1eafe;   /* tinted chip / highlight background */
+  --brand-line: #d9c6fb;   /* tinted border */
+}

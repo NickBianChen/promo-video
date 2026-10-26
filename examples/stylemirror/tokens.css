@@ -1,0 +1,75 @@
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url("../fonts/plus-jakarta-sans-latin.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Martian Mono";
+  src: url("../fonts/martian-mono-latin.woff2") format("woff2");
+  font-weight: 100 800;
+  font-style: normal;
+}
+:root {
+  --brand: #7d2ae8;
+  --brand-strong: #5b1fb0;
+  --brand-soft: #f1eafe;
+  --brand-line: #d9c6fb;
+  --ink: #0e1318;
+  --muted-ink: #4a5560;
+  --border: #e3e6ea;
+  --canvas: #ffffff;
+  --credit: #15803d;
+  --font-display: "Plus Jakarta Sans", sans-serif;
+  --font-mono: "Martian Mono", monospace;
+  --card-radius: 24px;
+  --card-shadow: 0 24px 60px rgba(14, 19, 24, 0.12);
+  /* registry contract tokens: the installed components read these names */
+  --bg: #ffffff;
+  --fg: #0e1318;
+  --surface: #ffffff;
+  --muted: #4a5560;
+  --accent: #5b1fb0;
+  --accent-2: #7d2ae8;
+  --font-body: "Plus Jakarta Sans", sans-serif;
+  --radius: 24px;
+}
+/* real-UI frame: screenshots sit in this card, content untouched */
+.ui-card {
+  position: absolute;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  background: var(--canvas);
+  box-shadow: var(--card-shadow);
+}
+.ui-card > img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+/* cursor and click ripple used by scenes (Phase 2 snippet) */
+.cursor {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  z-index: 50;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 8px rgba(14, 19, 24, 0.3));
+}
+.ripple {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+  border: 3px solid var(--brand);
+  border-radius: 50%;
+  z-index: 49;
+  pointer-events: none;
+  opacity: 0;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}

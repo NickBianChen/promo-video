@@ -1,0 +1,45 @@
+<template>
+  <!--
+    scene-demo: starter scene. Copy it per shot (land-l2.html, portrait-p3.html…),
+    rename every "demo" id and the timeline key, keep the patterns:
+      - the film's first scene has its key image on screen at frame 0 (social
+        thumbnail): push in only, no fade; later scenes fade + push in at 0
+      - fade out 0.2s before the end
+        (neighbouring hosts overlap 0.2s in the root for the crossfade)
+      - real UI screenshots inside .ui-card, only moved/scaled/cropped, never edited
+      - cursor: animate the box so the tip (7,4) lands on the target, ripple ≤ 6 frames after arrival
+      - easing and pacing from the theme via pv.ease()/pv.d()/pv.t()
+  -->
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #demo-stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    #demo-card { left: 1060px; top: 120px; width: 640px; height: 800px; }
+    #demo-card > img { height: 100%; object-fit: cover; }
+    #demo-cursor { left: 0; top: 0; opacity: 0; }
+    #demo-ripple { left: 0; top: 0; }
+  </style>
+  <div id="root" data-composition-id="scene-demo" data-width="1920" data-height="1080">
+    <div id="demo-stage" class="clip" data-start="0" data-duration="3.2">
+      <div id="demo-card" class="ui-card"><img src="assets/placeholder/before.svg" alt="" /></div>
+      <svg id="demo-cursor" class="cursor" viewBox="0 0 24 24"><path d="M4 2 L4 19 L8.5 14.8 L11.6 21.5 L14.4 20.2 L11.3 13.6 L17.5 13.2 Z" fill="#0e1318" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      <div id="demo-ripple" class="ripple"></div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const tip = { x: 7, y: 4 };            // cursor tip offset inside its 44px box
+    const T = { x: 1380, y: 520 };         // click target in frame pixels
+    const click = (at, p) => tl.fromTo("#demo-ripple", { x: p.x, y: p.y, scale: 0.4, opacity: 0.9 }, { scale: 2.8, opacity: 0, duration: 0.5, ease: "power2.out" }, at);
+    // opening scene: visible at 0. For later scenes use
+    // tl.fromTo("#demo-stage", { opacity: 0, scale: pv.push }, { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out" }, 0);
+    tl.fromTo("#demo-stage", { scale: pv.push }, { scale: 1, duration: pv.d(0.6), ease: pv.ease("enter") }, 0);
+    tl.set("#demo-cursor", { x: 1700, y: 900 }, 0);
+    tl.to("#demo-cursor", { opacity: 1, duration: 0.2 }, pv.t(0.7));
+    tl.to("#demo-cursor", { x: T.x - tip.x, y: T.y - tip.y, duration: pv.d(0.8), ease: pv.ease("move") }, pv.t(0.8));
+    click(pv.t(1.65), T);
+    tl.to("#demo-card", { scale: 0.985, duration: 0.1, ease: "power2.in" }, pv.t(1.65));
+    tl.to("#demo-card", { scale: 1, duration: 0.2, ease: "power2.out" }, pv.t(1.75));
+    tl.to("#demo-stage", { opacity: 0, duration: 0.2, ease: pv.ease("exit") }, 3.0);
+    window.__timelines["scene-demo"] = tl;
+  </script>
+</template>

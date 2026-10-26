@@ -1,0 +1,36 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #l6-stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    #l6-brand { position: absolute; left: 0; top: 80px; width: 1920px; display: flex; align-items: center; justify-content: center; gap: 20px; opacity: 0; }
+    #l6-brand img { width: 72px; height: 72px; }
+    #l6-brand span { font-size: 56px; font-weight: 800; letter-spacing: -0.02em; color: var(--ink); }
+    #l6-chip { position: absolute; left: 0; top: 560px; width: 1920px; display: flex; justify-content: center; opacity: 0; }
+    #l6-chip div { display: flex; align-items: center; gap: 14px; padding: 16px 34px; border: 2px solid var(--brand-line); border-radius: 999px; background: var(--brand-soft); color: var(--brand-strong); font-size: 36px; font-weight: 700; }
+    #l6-chip svg { width: 34px; height: 34px; }
+    #l6-cta { position: absolute; left: 0; top: 650px; width: 1920px; display: flex; justify-content: center; opacity: 0; }
+    #l6-cta div { padding: 26px 64px; border-radius: 999px; background: var(--brand); color: #fff; font-size: 44px; font-weight: 800; letter-spacing: -0.01em; box-shadow: 0 18px 44px rgba(125, 42, 232, 0.35); }
+    #l6-url { position: absolute; left: 0; top: 790px; width: 1920px; text-align: center; font-family: var(--font-mono); font-size: 32px; font-weight: 500; color: var(--ink); opacity: 0; }
+    #l6-fine { position: absolute; left: 0; top: 880px; width: 1920px; text-align: center; font-size: 28px; font-weight: 500; color: var(--muted-ink); opacity: 0; }
+  </style>
+  <div id="root" data-composition-id="land-l6" data-width="1920" data-height="1080">
+    <div id="l6-stage" class="clip" data-start="0" data-duration="4">
+      <div id="l6-brand"><img src="assets/ui/logo.svg" alt="" /><span>StyleMirror</span></div>
+      <div id="l6-chip"><div><svg viewBox="0 0 24 24" fill="none" stroke="#5b1fb0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>20 free credits · No card needed</div></div>
+      <div id="l6-cta"><div>Try an AI hairstyle</div></div>
+      <div id="l6-url">stylemirrorai.com</div>
+      <div id="l6-fine">Results vary by photo.</div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#l6-stage", { opacity: 0, scale: 1.03 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out" }, 0);
+    const rise = (id, at) => tl.fromTo(id, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, at);
+    rise("#l6-brand", 0.2);
+    rise("#l6-chip", 1.1);
+    tl.fromTo("#l6-cta", { opacity: 0, y: 30, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "back.out(1.6)" }, 1.3);
+    rise("#l6-url", 1.5);
+    rise("#l6-fine", 1.7);
+    window.__timelines["land-l6"] = tl;
+  </script>
+</template>

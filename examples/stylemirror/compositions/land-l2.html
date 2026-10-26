@@ -1,0 +1,43 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #l2-stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    #l2-card { left: 1060px; top: 110px; width: 497px; height: 860px; }
+    #l2-card img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; }
+    #l2-thumb { position: absolute; left: 0; top: 0; width: 150px; height: 182px; border-radius: 16px; object-fit: cover; box-shadow: 0 16px 40px rgba(14, 19, 24, 0.28); opacity: 0; z-index: 40; }
+    #l2-cursor { left: 0; top: 0; opacity: 0; }
+    #l2-ripple { left: 0; top: 0; }
+  </style>
+  <div id="root" data-composition-id="land-l2" data-width="1920" data-height="1080">
+    <div id="l2-stage" class="clip" data-start="0" data-duration="4.2">
+      <div id="l2-card" class="ui-card">
+        <img id="l2-empty" src="assets/website/ui-crops/left-empty.png" alt="" />
+        <img id="l2-filled" src="assets/website/ui-crops/left-photo.png" alt="" style="opacity:0" />
+      </div>
+      <img id="l2-thumb" src="assets/website/photos/transformations/bob-before.webp" alt="" />
+      <svg id="l2-cursor" class="cursor" viewBox="0 0 24 24"><path d="M4 2 L4 19 L8.5 14.8 L11.6 21.5 L14.4 20.2 L11.3 13.6 L17.5 13.2 Z" fill="#0e1318" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      <div id="l2-ripple" class="ripple"></div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const T = { x: 1308, y: 506 };            // centre of the upload area
+    const tip = { x: 7, y: 4 };               // cursor tip offset inside its 44px box
+    tl.fromTo("#l2-stage", { opacity: 0, scale: 1.03 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out" }, 0);
+    tl.fromTo("#l2-card", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 0.1);
+    // the selfie is picked up at the right and carried onto the upload area
+    tl.set("#l2-thumb", { x: 1700 - 75, y: 860 - 91 }, 0);
+    tl.set("#l2-cursor", { x: 1700 - tip.x + 20, y: 860 - tip.y + 30 }, 0);
+    tl.to("#l2-thumb", { opacity: 1, duration: 0.2, ease: "power2.out" }, 0.8);
+    tl.to("#l2-cursor", { opacity: 1, duration: 0.2, ease: "power2.out" }, 0.8);
+    tl.to("#l2-thumb", { x: T.x - 75, y: T.y - 91, duration: 1.0, ease: "power2.inOut" }, 1.0);
+    tl.to("#l2-cursor", { x: T.x - tip.x + 20, y: T.y - tip.y + 30, duration: 1.0, ease: "power2.inOut" }, 1.0);
+    // drop: ripple, then the real "photo selected" state replaces the thumbnail
+    tl.fromTo("#l2-ripple", { x: T.x, y: T.y, scale: 0.4, opacity: 0.9 }, { scale: 2.8, opacity: 0, duration: 0.5, ease: "power2.out" }, 2.05);
+    tl.to("#l2-filled", { opacity: 1, duration: 0.3, ease: "power2.out" }, 2.1);
+    tl.to("#l2-thumb", { opacity: 0, duration: 0.3, ease: "power2.out" }, 2.1);
+    tl.to("#l2-cursor", { x: 1760, y: 930, opacity: 0, duration: 0.7, ease: "power2.in" }, 2.8);
+    tl.to("#l2-stage", { opacity: 0, duration: 0.2, ease: "power2.in" }, 4.0);
+    window.__timelines["land-l2"] = tl;
+  </script>
+</template>

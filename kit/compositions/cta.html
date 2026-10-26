@@ -1,0 +1,191 @@
+<!doctype html>
+<!--
+  cta: closing call-to-action card (logo + name, headline, offer chip, button,
+  domain, fine print). Generalised from the StyleMirror L6/P5 scenes.
+
+  Every line is a variable; a blank string hides that line. Lines rise in one
+  after another, the button pops, then the card holds still until the cut
+  (end cards hold: no exit). Sizes are in cqw/cqh, so the same component
+  fits a landscape or portrait host; give the host the full frame (or the
+  middle 70% band on portrait so nothing enters the top/bottom 15%).
+
+  Variables: logo_src, brand_name, headline, chip, cta, url, fine, duration.
+-->
+<html
+  lang="en"
+  data-composition-id="cta"
+  data-composition-duration="4"
+  data-composition-variables='[
+    { "id": "duration", "type": "number", "role": "timing", "label": "Mount duration", "description": "Seconds the host shows this scene. 0 uses the template default.", "default": 0, "min": 0, "max": 60, "step": 0.1, "unit": "s" },
+    { "id": "logo_src", "type": "string", "role": "content", "label": "Logo", "description": "Project-relative logo path. Blank hides the logo.", "default": "assets/brand/logo.svg" },
+    { "id": "brand_name", "type": "string", "role": "content", "label": "Brand name", "description": "Wordmark next to the logo.", "default": "Brand" },
+    { "id": "headline", "type": "string", "role": "content", "label": "Headline", "description": "Main line. Blank hides it.", "default": "Try it free." },
+    { "id": "chip", "type": "string", "role": "content", "label": "Offer chip", "description": "Offer badge with a check mark. Blank hides it.", "default": "" },
+    { "id": "cta", "type": "string", "role": "content", "label": "Button", "description": "Button label. Blank hides it.", "default": "Get started" },
+    { "id": "url", "type": "string", "role": "content", "label": "Domain", "description": "Domain shown under the button.", "default": "example.com" },
+    { "id": "fine", "type": "string", "role": "content", "label": "Fine print", "description": "Disclaimer line. Blank hides it.", "default": "" }
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>CTA</title>
+  </head>
+  <body>
+    <template>
+      <div id="root" data-composition-id="cta" data-duration="4" data-fps="30">
+        <style>
+          #root {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            container-type: size;
+            color: var(--ink, #0e1318);
+            font-family: var(--font-display, system-ui, sans-serif);
+          }
+          .cta-clip {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: min(2.4cqh, 2.4cqw);
+            text-align: center;
+          }
+          .cta-line {
+            opacity: 0;
+          }
+          .cta-line:empty,
+          .cta-line.cta-hidden {
+            display: none;
+          }
+          .cta-brand {
+            display: flex;
+            align-items: center;
+            gap: min(1.6cqw, 1.6cqh);
+            margin-bottom: min(3cqh, 3cqw);
+            font-size: min(4.4cqw, 4.4cqh);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+          }
+          .cta-brand img {
+            width: 1.3em;
+            height: 1.3em;
+          }
+          .cta-headline {
+            max-width: 86cqw;
+            font-size: min(8cqw, 8.5cqh);
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+          }
+          .cta-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.4em;
+            padding: 0.45em 1em;
+            border: 2px solid var(--brand-line, #d9c6fb);
+            border-radius: 999px;
+            background: var(--brand-soft, #f1eafe);
+            color: var(--brand-strong, #5b1fb0);
+            font-size: min(2.6cqw, 3.4cqh);
+            font-weight: 700;
+          }
+          .cta-chip svg {
+            width: 1em;
+            height: 1em;
+          }
+          .cta-button {
+            padding: 0.6em 1.5em;
+            border-radius: 999px;
+            background: var(--brand, #7d2ae8);
+            color: #fff;
+            font-size: min(3.2cqw, 4.2cqh);
+            font-weight: 800;
+            letter-spacing: -0.01em;
+            box-shadow: 0 18px 44px color-mix(in srgb, var(--brand, #7d2ae8) 35%, transparent);
+          }
+          .cta-url {
+            font-family: var(--font-mono, monospace);
+            font-size: min(2.4cqw, 3cqh);
+            font-weight: 500;
+          }
+          .cta-fine {
+            font-size: max(24px, min(2cqw, 2.6cqh));
+            font-weight: 500;
+            color: var(--muted-ink, #4a5560);
+          }
+        </style>
+
+        <div id="cta-clip" class="cta-clip clip" data-start="0" data-duration="30" data-track-index="0">
+          <div class="cta-line cta-brand"><img data-var-src="logo_src" src="assets/brand/logo.svg" alt="" /><span class="cta-name"></span></div>
+          <div class="cta-line cta-headline"></div>
+          <div class="cta-line cta-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span></span></div>
+          <div class="cta-line cta-button"></div>
+          <div class="cta-line cta-url"></div>
+          <div class="cta-line cta-fine"></div>
+        </div>
+
+        <script src="assets/vendor/gsap.min.js"></script>
+        <script>
+          (function () {
+            "use strict";
+
+            var root = document.getElementById("root");
+            var vars =
+              window.__hyperframes && window.__hyperframes.getVariables
+                ? window.__hyperframes.getVariables()
+                : {};
+            function str(key, fallback) {
+              return vars[key] == null ? fallback : String(vars[key]);
+            }
+
+            var brand = root.querySelector(".cta-brand");
+            var logo = brand.querySelector("img");
+            var chip = root.querySelector(".cta-chip");
+            root.querySelector(".cta-name").textContent = str("brand_name", "Brand");
+            root.querySelector(".cta-headline").textContent = str("headline", "Try it free.");
+            chip.querySelector("span").textContent = str("chip", "");
+            root.querySelector(".cta-button").textContent = str("cta", "Get started");
+            root.querySelector(".cta-url").textContent = str("url", "example.com");
+            root.querySelector(".cta-fine").textContent = str("fine", "");
+            if (str("logo_src", "assets/brand/logo.svg") === "") logo.style.display = "none";
+            if (chip.textContent.trim() === "") chip.classList.add("cta-hidden");
+
+            var lines = Array.prototype.filter.call(root.querySelectorAll(".cta-line"), function (el) {
+              return !el.classList.contains("cta-hidden") && el.textContent.trim() !== "" || el === brand;
+            });
+
+            var css = getComputedStyle(document.documentElement);
+            var enter = css.getPropertyValue("--motion-enter").trim() || "power3.out";
+            var pop = css.getPropertyValue("--motion-pop").trim() || "back.out(1.6)";
+
+            // IN: lines rise one after another (~0.2s apart), the button pops.
+            // Compressed together when the mount is shorter than the cascade.
+            var durationVar = Number(vars.duration);
+            var duration = Math.max(0.001, durationVar > 0 ? durationVar : parseFloat(root.dataset.duration || "4"));
+            var STEP_BASE = 0.2;
+            var RISE_BASE = 0.5;
+            var inBase = 0.2 + STEP_BASE * Math.max(0, lines.length - 1) + RISE_BASE;
+            var scale = duration < inBase ? duration / inBase : 1;
+
+            var tl = gsap.timeline({ paused: true });
+            lines.forEach(function (el, index) {
+              var at = (0.2 + STEP_BASE * index) * scale;
+              if (el.classList.contains("cta-button")) {
+                tl.fromTo(el, { opacity: 0, y: 30, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: RISE_BASE * scale, ease: pop }, at);
+              } else {
+                tl.fromTo(el, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: RISE_BASE * scale, ease: enter }, at);
+              }
+            });
+            // HOLD: still until the cut; end cards never exit.
+
+            tl.seek(0);
+            window.__timelines = window.__timelines || {};
+            window.__timelines["cta"] = tl;
+          })();
+        </script>
+      </div>
+    </template>
+  </body>
+</html>

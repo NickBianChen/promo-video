@@ -1,0 +1,52 @@
+/* base.css: theme-agnostic building blocks. Colors, fonts and radii come from
+   theme.css (style) and brand.css (the website's colors); never hard-code them here. */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+:root {
+  /* registry contract tokens: installed registry components read these names */
+  --bg: var(--canvas);
+  --fg: var(--ink);
+  --surface: var(--canvas);
+  --muted: var(--muted-ink);
+  --accent: var(--brand-strong);
+  --accent-2: var(--brand);
+  --font-body: var(--font-display);
+  --radius: var(--card-radius);
+}
+/* real-UI frame: screenshots sit in this card, content untouched */
+.ui-card {
+  position: absolute;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  background: var(--canvas);
+  box-shadow: var(--card-shadow);
+}
+.ui-card > img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+/* cursor and click ripple: animate x/y in the scene timeline */
+.cursor {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  z-index: 50;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 8px rgba(14, 19, 24, 0.3));
+}
+.ripple {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+  border: 3px solid var(--brand);
+  border-radius: 50%;
+  z-index: 49;
+  pointer-events: none;
+  opacity: 0;
+}

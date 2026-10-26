@@ -1,0 +1,11 @@
+{
+  "name": "__NAME__",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx --yes hyperframes@__HF_VERSION__ preview",
+    "check": "npx --yes hyperframes@__HF_VERSION__ check",
+    "render": "npx --yes hyperframes@__HF_VERSION__ render",
+    "publish": "npx --yes hyperframes@__HF_VERSION__ publish"
+  }
+}

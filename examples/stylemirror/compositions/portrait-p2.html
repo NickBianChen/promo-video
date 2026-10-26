@@ -1,0 +1,70 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #p2-stage { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+    #p2-card { left: 280px; top: 700px; width: 521px; height: 900px; }
+    #p2-card img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: cover; }
+    .p2-panel { left: 108px; top: 800px; width: 864px; opacity: 0; }
+    .p2-panel > img { display: block; width: 100%; height: auto; }
+    #p2-btn { left: 108px; top: 860px; width: 864px; opacity: 0; }
+    #p2-thumb { position: absolute; left: 0; top: 0; width: 150px; height: 182px; border-radius: 16px; object-fit: cover; box-shadow: 0 16px 40px rgba(14, 19, 24, 0.28); opacity: 0; z-index: 40; }
+    #p2-cursor { left: 0; top: 0; opacity: 0; }
+    #p2-ripple { left: 0; top: 0; }
+  </style>
+  <div id="root" data-composition-id="portrait-p2" data-width="1080" data-height="1920">
+    <div id="p2-stage" class="clip" data-start="0" data-duration="6.2">
+      <div id="p2-card" class="ui-card">
+        <img id="p2-empty" src="assets/website/ui-crops/left-empty.png" alt="" />
+        <img id="p2-filled" src="assets/website/ui-crops/left-photo.png" alt="" style="opacity:0" />
+      </div>
+      <div id="p2-styles" class="ui-card p2-panel"><img src="assets/website/ui-crops/panel-styles.png" alt="" /></div>
+      <div id="p2-photo" class="ui-card p2-panel"><img src="assets/website/ui-crops/panel-photo.png" alt="" /></div>
+      <div id="p2-describe" class="ui-card p2-panel"><img src="assets/website/ui-crops/panel-describe.png" alt="" /></div>
+      <div id="p2-btn" class="ui-card"><img src="assets/website/ui-crops/button-only.png" alt="" /></div>
+      <img id="p2-thumb" src="assets/website/photos/transformations/bob-before.webp" alt="" />
+      <svg id="p2-cursor" class="cursor" viewBox="0 0 24 24"><path d="M4 2 L4 19 L8.5 14.8 L11.6 21.5 L14.4 20.2 L11.3 13.6 L17.5 13.2 Z" fill="#0e1318" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      <div id="p2-ripple" class="ripple"></div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const tip = { x: 7, y: 4 };
+    const T = { x: 540, y: 1150 };                      // upload area centre
+    const TAB = { photo: { x: 539, y: 863 }, describe: { x: 807, y: 863 } };
+    const BTN = { x: 536, y: 973 };
+    const cur = (p) => ({ x: p.x - tip.x, y: p.y - tip.y });
+    const ripple = (at, p) => tl.fromTo("#p2-ripple", { x: p.x, y: p.y, scale: 0.4, opacity: 0.9 }, { scale: 2.8, opacity: 0, duration: 0.5, ease: "power2.out", immediateRender: false }, at);
+    gsap.set("#p2-ripple", { opacity: 0 });
+    tl.fromTo("#p2-stage", { opacity: 0, scale: 1.03 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out" }, 0);
+    tl.fromTo("#p2-card", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }, 0.1);
+    // A: carry the selfie onto the upload area
+    tl.set("#p2-thumb", { x: 880 - 75, y: 1400 - 91 }, 0);
+    tl.set("#p2-cursor", { x: 880 - tip.x + 20, y: 1400 - tip.y + 30 }, 0);
+    tl.to(["#p2-thumb", "#p2-cursor"], { opacity: 1, duration: 0.2 }, 0.4);
+    tl.to("#p2-thumb", { x: T.x - 75, y: T.y - 91, duration: 0.8, ease: "power2.inOut" }, 0.5);
+    tl.to("#p2-cursor", { x: T.x - tip.x + 20, y: T.y - tip.y + 30, duration: 0.8, ease: "power2.inOut" }, 0.5);
+    ripple(1.35, T);
+    tl.to("#p2-filled", { opacity: 1, duration: 0.3 }, 1.4);
+    tl.to("#p2-thumb", { opacity: 0, duration: 0.3 }, 1.4);
+    // B: the three ways to choose
+    tl.to("#p2-card", { opacity: 0, duration: 0.3 }, 2.0);
+    tl.to("#p2-styles", { opacity: 1, duration: 0.3 }, 2.0);
+    tl.to("#p2-cursor", { x: cur(TAB.photo).x, y: cur(TAB.photo).y, duration: 0.6, ease: "power2.inOut" }, 2.2);
+    ripple(2.85, TAB.photo);
+    tl.to("#p2-photo", { opacity: 1, duration: 0.25 }, 2.9);
+    tl.to("#p2-styles", { opacity: 0, duration: 0.25 }, 2.9);
+    tl.to("#p2-cursor", { x: cur(TAB.describe).x, y: cur(TAB.describe).y, duration: 0.5, ease: "power2.inOut" }, 3.3);
+    ripple(3.85, TAB.describe);
+    tl.to("#p2-describe", { opacity: 1, duration: 0.25 }, 3.9);
+    tl.to("#p2-photo", { opacity: 0, duration: 0.25 }, 3.9);
+    // C: press the button
+    tl.to("#p2-describe", { opacity: 0, duration: 0.3 }, 4.5);
+    tl.fromTo("#p2-btn", { opacity: 0, scale: 0.96 }, { opacity: 1, scale: 1, duration: 0.35, ease: "power2.out" }, 4.5);
+    tl.to("#p2-cursor", { x: cur(BTN).x, y: cur(BTN).y, duration: 0.6, ease: "power2.inOut" }, 4.6);
+    ripple(5.3, BTN);
+    tl.to("#p2-btn", { scale: 0.985, duration: 0.1, ease: "power2.in" }, 5.3);
+    tl.to("#p2-btn", { scale: 1, duration: 0.2, ease: "power2.out" }, 5.4);
+    tl.to("#p2-stage", { opacity: 0, duration: 0.2, ease: "power2.in" }, 6.0);
+    window.__timelines["portrait-p2"] = tl;
+  </script>
+</template>

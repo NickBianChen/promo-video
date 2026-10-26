@@ -1,0 +1,36 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #p5-stage { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; }
+    #p5-brand { position: absolute; left: 0; top: 340px; width: 1080px; display: flex; align-items: center; justify-content: center; gap: 20px; opacity: 0; }
+    #p5-brand img { width: 80px; height: 80px; }
+    #p5-brand span { font-size: 60px; font-weight: 800; letter-spacing: -0.02em; color: var(--ink); }
+    #p5-chip { position: absolute; left: 0; top: 760px; width: 1080px; display: flex; justify-content: center; opacity: 0; }
+    #p5-chip div { display: flex; align-items: center; gap: 14px; padding: 18px 36px; border: 2px solid var(--brand-line); border-radius: 999px; background: var(--brand-soft); color: var(--brand-strong); font-size: 34px; font-weight: 700; }
+    #p5-chip svg { width: 34px; height: 34px; }
+    #p5-cta { position: absolute; left: 0; top: 890px; width: 1080px; display: flex; justify-content: center; opacity: 0; }
+    #p5-cta div { padding: 28px 70px; border-radius: 999px; background: var(--brand); color: #fff; font-size: 46px; font-weight: 800; letter-spacing: -0.01em; box-shadow: 0 18px 44px rgba(125, 42, 232, 0.35); }
+    #p5-url { position: absolute; left: 0; top: 1060px; width: 1080px; text-align: center; font-family: var(--font-mono); font-size: 36px; font-weight: 500; color: var(--ink); opacity: 0; }
+    #p5-fine { position: absolute; left: 0; top: 1150px; width: 1080px; text-align: center; font-size: 30px; font-weight: 500; color: var(--muted-ink); opacity: 0; }
+  </style>
+  <div id="root" data-composition-id="portrait-p5" data-width="1080" data-height="1920">
+    <div id="p5-stage" class="clip" data-start="0" data-duration="3">
+      <div id="p5-brand"><img src="assets/ui/logo.svg" alt="" /><span>StyleMirror</span></div>
+      <div id="p5-chip"><div><svg viewBox="0 0 24 24" fill="none" stroke="#5b1fb0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>20 free credits · No card needed</div></div>
+      <div id="p5-cta"><div>Try an AI hairstyle</div></div>
+      <div id="p5-url">stylemirrorai.com</div>
+      <div id="p5-fine">Results vary by photo.</div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#p5-stage", { opacity: 0, scale: 1.03 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out" }, 0);
+    const rise = (id, at) => tl.fromTo(id, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, at);
+    rise("#p5-brand", 0.05);
+    rise("#p5-chip", 0.5);
+    tl.fromTo("#p5-cta", { opacity: 0, y: 30, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: "back.out(1.6)" }, 0.65);
+    rise("#p5-url", 0.8);
+    rise("#p5-fine", 0.8);
+    window.__timelines["portrait-p5"] = tl;
+  </script>
+</template>

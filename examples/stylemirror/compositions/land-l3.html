@@ -1,0 +1,51 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #l3-stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    .l3-card { left: 362px; top: 230px; width: 1197px; }
+    .l3-card > img { display: block; width: 100%; height: auto; }
+    #l3-describe, #l3-photo { opacity: 0; }
+    #l3-strip { left: 181px; top: 574px; width: 1558px; opacity: 0; }
+    #l3-cursor { left: 0; top: 0; opacity: 0; }
+    #l3-ripple { left: 0; top: 0; }
+  </style>
+  <div id="root" data-composition-id="land-l3" data-width="1920" data-height="1080">
+    <div id="l3-stage" class="clip" data-start="0" data-duration="5.2">
+      <div id="l3-styles" class="ui-card l3-card"><img src="assets/website/ui-crops/panel-styles.png" alt="" /></div>
+      <div id="l3-photo" class="ui-card l3-card"><img src="assets/website/ui-crops/panel-photo.png" alt="" /></div>
+      <div id="l3-describe" class="ui-card l3-card"><img src="assets/website/ui-crops/panel-describe.png" alt="" /></div>
+      <div id="l3-strip" class="ui-card"><img src="assets/website/ui-crops/button-strip.png" alt="" /></div>
+      <svg id="l3-cursor" class="cursor" viewBox="0 0 24 24"><path d="M4 2 L4 19 L8.5 14.8 L11.6 21.5 L14.4 20.2 L11.3 13.6 L17.5 13.2 Z" fill="#0e1318" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      <div id="l3-ripple" class="ripple"></div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    const tip = { x: 7, y: 4 };
+    const P = { photo: { x: 959, y: 317 }, describe: { x: 1331, y: 317 }, button: { x: 506, y: 650 } };
+    const click = (at, p) => tl.fromTo("#l3-ripple", { x: p.x, y: p.y, scale: 0.4, opacity: 0.9 }, { scale: 2.8, opacity: 0, duration: 0.5, ease: "power2.out" }, at);
+    tl.fromTo("#l3-stage", { opacity: 0, scale: 1.03 }, { opacity: 1, scale: 1, duration: 0.3, ease: "power2.out" }, 0);
+    tl.fromTo("#l3-styles", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power3.out" }, 0.15);
+    tl.set("#l3-cursor", { x: 1500, y: 820 }, 0);
+    tl.to("#l3-cursor", { opacity: 1, duration: 0.2 }, 0.6);
+    // Styles -> Photo
+    tl.to("#l3-cursor", { x: P.photo.x - tip.x, y: P.photo.y - tip.y, duration: 0.7, ease: "power2.inOut" }, 0.7);
+    click(1.4, P.photo);
+    tl.to("#l3-photo", { opacity: 1, duration: 0.25 }, 1.45);
+    tl.to("#l3-styles", { opacity: 0, duration: 0.25 }, 1.45);
+    // Photo -> Describe
+    tl.to("#l3-cursor", { x: P.describe.x - tip.x, y: P.describe.y - tip.y, duration: 0.6, ease: "power2.inOut" }, 1.95);
+    click(2.55, P.describe);
+    tl.to("#l3-describe", { opacity: 1, duration: 0.25 }, 2.6);
+    tl.to("#l3-photo", { opacity: 0, duration: 0.25 }, 2.6);
+    // the panel gives way to the action button
+    tl.to("#l3-describe", { opacity: 0, duration: 0.3 }, 3.3);
+    tl.fromTo("#l3-strip", { opacity: 0, scale: 0.96 }, { opacity: 1, scale: 1, duration: 0.35, ease: "power2.out" }, 3.3);
+    tl.to("#l3-cursor", { x: P.button.x - tip.x, y: P.button.y - tip.y, duration: 0.7, ease: "power2.inOut" }, 3.4);
+    click(4.1, P.button);
+    tl.to("#l3-strip", { scale: 0.985, duration: 0.1, ease: "power2.in" }, 4.1);
+    tl.to("#l3-strip", { scale: 1, duration: 0.2, ease: "power2.out" }, 4.2);
+    tl.to("#l3-stage", { opacity: 0, duration: 0.2, ease: "power2.in" }, 5.0);
+    window.__timelines["land-l3"] = tl;
+  </script>
+</template>

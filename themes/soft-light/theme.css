@@ -1,0 +1,33 @@
+/* theme: soft-light — white canvas, soft brand glow, rounded floating cards.
+   Proven on StyleMirror (2026-10). Motion: calm push-in + crossfade. */
+@font-face {
+  font-family: "Plus Jakarta Sans";
+  src: url("../fonts/plus-jakarta-sans-latin.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Martian Mono";
+  src: url("../fonts/martian-mono-latin.woff2") format("woff2");
+  font-weight: 100 800;
+  font-style: normal;
+}
+:root {
+  --canvas: #ffffff;
+  --ink: #0e1318;
+  --muted-ink: #4a5560;
+  --border: #e3e6ea;
+  --font-display: "Plus Jakarta Sans", sans-serif;
+  --font-mono: "Martian Mono", monospace;
+  --card-radius: 24px;
+  --card-shadow: 0 24px 60px rgba(14, 19, 24, 0.12);
+  --accent-text: var(--brand); /* brand-colored text (captions with accent green) */
+  --glow-strength: 16%;
+  /* motion presets, read by assets/js/motion.js */
+  --motion-enter: power3.out;
+  --motion-exit: power2.in;
+  --motion-pop: back.out(1.6);
+  --motion-move: power2.inOut;
+  --motion-speed: 1;
+  --motion-push: 1.03;
+}

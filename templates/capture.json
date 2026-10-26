@@ -1,0 +1,38 @@
+{
+  "baseUrl": "https://example.com",
+  "locale": "en-US",
+  "colorScheme": "light",
+  "delay": 800,
+  "hide": [
+    "nextjs-portal",
+    "[data-nextjs-toast]",
+    "#__next-build-watcher",
+    "[data-dev-only]"
+  ],
+  "viewports": {
+    "desktop": { "width": 1920, "height": 1080, "deviceScaleFactor": 1 },
+    "mobile": { "width": 430, "height": 932, "deviceScaleFactor": 3, "isMobile": true }
+  },
+  "shots": [
+    { "name": "home-top", "path": "/" },
+    { "name": "home-full", "path": "/", "fullPage": true },
+    { "name": "pricing", "path": "/pricing", "selector": "main" },
+    {
+      "name": "app-empty",
+      "path": "/app",
+      "waitFor": "main",
+      "crops": {
+        "desktop": [{ "name": "app-panel", "clip": { "x": 360, "y": 120, "width": 1200, "height": 760 } }]
+      }
+    },
+    {
+      "name": "app-filled",
+      "path": "/app",
+      "viewports": ["desktop"],
+      "actions": [
+        { "upload": ["input[type=file]", "assets/website/photos/sample.jpg"] },
+        { "wait": 1500 }
+      ]
+    }
+  ]
+}

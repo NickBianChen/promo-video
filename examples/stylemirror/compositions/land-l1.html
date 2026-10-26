@@ -1,0 +1,27 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; overflow: hidden; }
+    #l1-stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    #l1-photo { left: 1060px; top: 130px; width: 640px; height: 800px; }
+    #l1-photo > img { height: 100%; object-fit: cover; }
+  </style>
+  <div id="root" data-composition-id="land-l1" data-width="1920" data-height="1080">
+    <div id="l1-stage" class="clip" data-start="0" data-duration="3.2">
+      <div id="l1-photo" class="ui-card">
+        <img src="assets/website/photos/transformations/bob-before.webp" alt="" />
+      </div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    tl.fromTo("#l1-stage", { scale: 1.03 }, { scale: 1, duration: 0.5, ease: "power2.out" }, 0);
+    tl.fromTo("#l1-photo", { y: 30, rotation: 0 }, { y: 0, duration: 0.6, ease: "power3.out" }, 0);
+    tl.to("#l1-photo", { rotation: -2.2, duration: 0.5, ease: "sine.inOut" }, 0.9);
+    tl.to("#l1-photo", { rotation: 2.2, duration: 0.6, ease: "sine.inOut" }, 1.4);
+    tl.to("#l1-photo", { rotation: -1.2, duration: 0.5, ease: "sine.inOut" }, 2.0);
+    tl.to("#l1-photo", { rotation: 0, duration: 0.4, ease: "sine.inOut" }, 2.5);
+    tl.to("#l1-photo", { scale: 1.04, duration: 3.2, ease: "none" }, 0);
+    tl.to("#l1-stage", { opacity: 0, duration: 0.2, ease: "power2.in" }, 3.0);
+    window.__timelines["land-l1"] = tl;
+  </script>
+</template>
